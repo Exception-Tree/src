@@ -1,11 +1,12 @@
 from pathlib import Path
-from typing import Union
+from typing import Union, Literal
 
 from report.common.report_item_common import ReportItemCommon
 
 
 class ReportImageCommonParam:
-    def __init__(self, width: Union[float, str], height: Union[float, str]):
+    def __init__(self, width: Union[float, str], height: Union[float, str],
+                 position_on_page: Literal['top', 'bottom', 'center', 'here'] = 'center'):
         size_types = {'full_width': '\\linewidth',
                       'full_height': '\\textheight'}
         if isinstance(width, float):
@@ -17,6 +18,8 @@ class ReportImageCommonParam:
                 raise Exception(f'unknown width = {width}')
         self.__height = height
 
+        self.__position = position_on_page
+
     @property
     def width(self):
         return self.__width
@@ -24,6 +27,10 @@ class ReportImageCommonParam:
     @property
     def height(self):
         return self.__height
+
+    @property
+    def position(self):
+        return self.__position
 
 
 class ReportImageCommon(ReportItemCommon):
@@ -34,9 +41,23 @@ class ReportImageCommon(ReportItemCommon):
         self.__reference = reference
         self.__param = param
 
-    def generate_latex(self, remote) -> str:
-        ltx = '\\begin{figure}\n'
-        ltx += '\\centering'
+    @property
+    def reference(self):
+        return self.__reference
+
+    def generate_latex(self, output_path, remote) -> str:
+        ltx = '\\begin{figure}'
+        if self.__param and self.__param.position != 'center':
+            if self.__param.position == 'top':
+                ltx += '[t]'
+            elif self.__param.position == 'bottom':
+                ltx += '[b]'
+            elif self.__param.position == 'here':
+                ltx += '[H]'
+
+        if self.__param and self.__param.position == 'center':
+            ltx += '\\centering'
+
         if self.__param:
             ltx += f'\\includegraphics[width={self.__param.width},height={self.__param.width}]'
             ltx += '{'
