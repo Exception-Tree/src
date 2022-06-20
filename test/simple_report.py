@@ -1,7 +1,17 @@
+from pathlib import Path
+
 from report import SimpleReportCreator
+from report.common.report_common import ReportImageCommon
+from report.common.report_image_common import ReportImageCommonParam
 from report.g2_105.report_g2_105 import ReportG2105, ReportTitleG2105
 
 report = ReportG2105()
-report.append(ReportTitleG2105('test', 'some'))
+title = ReportTitleG2105(title='Test Title', doc_name='Doc Name')
+title.approvedBy('director', 'Ivanov I.I.')
+report.append(title)
+
+param = ReportImageCommonParam('full_width', 50)
+report.append(ReportImageCommon(Path('./tester.png'), 'test caption', 'test_ref', param))
+
 src = SimpleReportCreator(report)
 src.generate_pdf(remote=False)
