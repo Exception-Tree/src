@@ -23,20 +23,20 @@ class ReportTitleG2105(ReportTitleCommon):
     def generate_latex(self):
         ltx = self.__auto_title_font_size()
         if self.__departament:
-            ltx += fr'\\ESKDdepartment{{{self.__departament}}}\n'
-        ltx += fr'\\ESKDcompany{{{self.__company}}}\n'
-        ltx += fr'\\ESKDdocName{{{self.__docName}}}\n'
+            ltx += f'\\ESKDdepartment{{{self.__departament}}}\n'
+        ltx += f'\\ESKDcompany{{{self.__company}}}\n'
+        ltx += f'\\ESKDdocName{{{self.__docName}}}\n'
         # if len(self.__docName) > 10:
         #     ltx += fr'\\ESKDcolumnI{{\\ESKDfontII {self.__docName}}}\n'
         # self.ltx += fr'\\ESKDsignature{{{self.__signature}}}\n'
         # self.ltx += fr'\\ESKDtitle{{{self.__title}}}\n'
         # if self.__classCode:
         #     self.ltx += fr'\\ESKDclassCode{{{self.__classCode}}}\n'
-        # if self.__approved:
-        #     self.ltx += fr'\\ESKDtitleApprovedBy{{{self.approved[0]}}}{{{self.approved[1]}}}\n'
+        if self.__approved:
+            ltx += f'\\ESKDtitleApprovedBy{{{self.approved[0]}}}{{{self.approved[1]}}}\n'
         #
-        # for status, name in self.__agreedBy:
-        #     self.ltx += rf'\\ESKDtitleAgreedBy{{{status}}}{{{name}}}\n'
+        for status, name in self.__agreedBy:
+            ltx += f'\\ESKDtitleAgreedBy{{{status}}}{{{name}}}\n'
         #
         # index = 0
         # for status, name in self.__designedBy:
@@ -46,12 +46,21 @@ class ReportTitleG2105(ReportTitleCommon):
         #     index += 1
         return ltx
 
+    def approvedBy(self, status: str, name: str):
+        self.__approved = [status.capitalize(), name]
+
+    def appendAgreedBy(self, status: str, name: str):
+        self.__agreedBy.append([status.capitalize(), name])
+
+    def appendDesignedBy(self, status: str, name: str):
+        self.__designedBy.append([status.capitalize(), name])
+
     def __auto_title_font_size(self):
         amount = max(len(self.agreed_by), len(self.designed_by))
         if amount > 11:
-            return r'\\renewcommand{\\ESKDtitleFontVIII}{\\ESKDfontIII}'
+            return '\\renewcommand{\\ESKDtitleFontVIII}{\\ESKDfontIII}'
         else:
-            return r'\\renewcommand{\\ESKDtitleFontVIII}{\\ESKDfontII}'
+            return '\\renewcommand{\\ESKDtitleFontVIII}{\\ESKDfontII}'
 
     @property
     def company(self):
@@ -87,9 +96,11 @@ class ReportG2105(ReportCommon):
 \usepackage[utf8]{inputenc}
 \usepackage[russian]{babel}"""
         ltx += '\n'
-        if 'title' in self.items:
-            ltx += self.items['title'].generate_latex()
+        if self.title:
+            ltx += self.title.generate_latex()
         ltx += "\n\\begin{document}\\maketitle\\tableofcontents"
+        for item in self.items:
+            ltx += item.generate_latex()
         #if ReportTitleG105 in super().__items:
         #    ltx =
         ltx += "\\end{document}"

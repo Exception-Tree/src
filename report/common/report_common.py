@@ -2,13 +2,10 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Union, Literal
 
+from report.common.report_image_common import ReportImageCommon
 from report.common.report_item_common import ReportItemCommon
 from report.common.report_title_common import ReportTitleCommon
 from report.utils.greek import greek_replace
-
-
-class ReportImageCommon(ABC):
-    pass
 
 
 class ReportTextCommon(ReportItemCommon):
@@ -72,10 +69,10 @@ class ReportAppendixCommon(ABC):
 
 class ReportCommon(ABC):
     def __init__(self):
-        self.__items = {}
+        self.__items = {'title': None, 'items': []}
 
     @property
-    def items(self):
+    def all_items(self):
         return self.__items
 
     def append(self, item: Union[ReportTitleCommon, ReportImageCommon,
@@ -84,6 +81,14 @@ class ReportCommon(ABC):
             self.__items['title'] = item
         else:
             self.__items['items'].append(item)
+
+    @property
+    def title(self):
+        return self.__items['title']
+
+    @property
+    def items(self):
+        return self.__items['items']
 
     @abstractmethod
     def generate_latex(self):

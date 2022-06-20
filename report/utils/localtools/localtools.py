@@ -49,11 +49,12 @@ class LocalTools(object):
                         p = subprocess.Popen(['pdflatex.exe', '-draftmode', '-interaction=nonstopmode',
                                               f'-output-directory={path}', tex_file])
                         p.wait()
-                        p = subprocess.Popen(['bibtex.exe', f'-output-directory={path}', tex_file])
-                        p.wait()
+                        #p = subprocess.Popen(['bibtex.exe', f'-output-directory={path}', tex_file])
+                        #p = subprocess.Popen(['bibtex.exe', f'{Path(tex_file).stem}.aux'])
+                        #p.wait()
                         p = subprocess.Popen(
-                            ['makeindex.exe', f'-output-directory={path}',
-                             f'{Path(tex_file).stem}.idx'])
+                            ['makeindex.exe', f'-output-directory={path}', f'{Path(tex_file).stem}.idx'])
+                            #['makeindex.exe'])
                         p.wait()
                         p = subprocess.Popen(
                             ['makeindex.exe', '-s', f'-output-directory={path}', tex_file])
