@@ -20,7 +20,7 @@ class ReportTitleG2105(ReportTitleCommon):
         # self.__signature = signature
         # self.__classCode = classCode
 
-    def generate_latex(self):
+    def generate_latex(self, remote):
         ltx = self.__auto_title_font_size()
         if self.__departament:
             ltx += f'\\ESKDdepartment{{{self.__departament}}}\n'
@@ -88,19 +88,21 @@ class ReportTitleG2105(ReportTitleCommon):
 
 
 class ReportG2105(ReportCommon):
-    def generate_latex(self):
+    def generate_latex(self, remote):
         ltx = f"\\documentclass[russian,utf8,oneside]"+"{eskdtext}"
         ltx += r"""
 \usepackage[OT1]{fontenc}
 \newcommand{\No}{\textnumero}
 \usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}"""
+\usepackage[russian]{babel}
+\usepackage{subfiles}
+"""
         ltx += '\n'
         if self.title:
-            ltx += self.title.generate_latex()
+            ltx += self.title.generate_latex(remote)
         ltx += "\n\\begin{document}\\maketitle\\tableofcontents"
         for item in self.items:
-            ltx += item.generate_latex()
+            ltx += item.generate_latex(remote)
         #if ReportTitleG105 in super().__items:
         #    ltx =
         ltx += "\\end{document}"

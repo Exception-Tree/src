@@ -91,5 +91,5 @@ class ReportCommon(ABC):
         return self.__items['items']
 
     @abstractmethod
-    def generate_latex(self):
+    def generate_latex(self, remote=False):
         raise NotImplementedError

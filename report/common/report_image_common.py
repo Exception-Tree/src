@@ -34,7 +34,7 @@ class ReportImageCommon(ReportItemCommon):
         self.__reference = reference
         self.__param = param
 
-    def generate_latex(self) -> str:
+    def generate_latex(self, remote) -> str:
         ltx = '\\begin{figure}\n'
         ltx += '\\centering'
         if self.__param:
