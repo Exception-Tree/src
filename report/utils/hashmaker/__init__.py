@@ -1,0 +1,1 @@
+from .hashmaker import HashMaker
