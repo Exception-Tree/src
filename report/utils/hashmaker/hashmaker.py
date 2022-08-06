@@ -6,12 +6,14 @@ from typing import Union
 
 
 class HashMaker(object):
-    def __init__(self, path: Path, name: Path = 'mputils.hash'):
+    def __init__(self, path: Path, name: Path = 'src.hash'):
         self.__config = {}
         self.__filename = path / name
         try:
             with open(self.__filename) as json_file:
                 self.__config = json.load(json_file)
+        except FileNotFoundError:
+            open(self.__filename, 'w')
         except Exception as e:  # TODO: Specify Exception
             print(e)
 

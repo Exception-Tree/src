@@ -1,1 +1,2 @@
-from .report import SimpleReportCreator
+from .report import SimpleReportCreator, SimpleReportCreatorCallback
+from .utils import hashmaker

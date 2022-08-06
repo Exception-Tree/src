@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "src"
-version = "2.2.6-dev"
+version = "0.0.1"
 description = ""
 authors = ["serbeh <serbeh@gmail.com>"]
+
+packages = [
+    { include = "report" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
