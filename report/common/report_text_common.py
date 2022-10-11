@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from typing import Union
 
 from report.common.report_image_common import ReportImageCommon
 from report.common.report_item_common import ReportItemCommon
@@ -9,8 +10,14 @@ from report.utils.nettools import NetTools
 
 
 class ReportTextCommon(ReportItemCommon):
-    def __init__(self, filename: Path, template: str = None):
-        self.__filename = filename
+    def __init__(self, value: Union[Path, str], template: str = None) :
+        if isinstance(value, Path):
+            self.__filename = value
+            self.__text = None
+        else:
+            self.__filename = None
+            self.__text = value
+
         self.__template = template
         self.__items = []
 
@@ -60,8 +67,13 @@ class ReportTextCommon(ReportItemCommon):
 
     def generate_latex(self, output_path: Path, remote: bool) -> str:
         ltx = ''
+
+        if self.__text:
+            return self.__text
+
         if self.__template:
             self.__filename = self.__find_and_replace(self.__filename, self.__template)
+
 
         if self.__filename.suffix == '.md':
             if remote:
