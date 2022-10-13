@@ -1,3 +1,7 @@
+from report.g2_105.report_appendix_g2_105 import ReportAppendixG2105
+
+from report.common.report_item_common import ReportItemCommon
+
 from report.common import ReportCommon
 from report.common.report_title_common import ReportTitleCommon
 
@@ -88,6 +92,17 @@ class ReportTitleG2105(ReportTitleCommon):
 
 
 class ReportG2105(ReportCommon):
+    def __init__(self):
+        self.__items = {'appendix': [], 'items': []}
+
+    def append(self, item: ReportItemCommon):
+        if isinstance(item, ReportTitleG2105):
+            self.__items['title'] = item
+        elif isinstance(item, ReportAppendixG2105):
+            self.__items['appendix'].append(item)
+        else:
+            self.__items['items'].append(item)
+
     def generate_latex(self, out_path, remote):
         ltx = f"\\documentclass[russian,utf8,oneside]"+"{eskdtext}"
         ltx += r"""
@@ -102,12 +117,12 @@ class ReportG2105(ReportCommon):
 \def\tightlist{}
 """
         ltx += '\n'
-        if self.title:
-            ltx += self.title.generate_latex(out_path, remote)
+        if self.__items['title']:
+            ltx += self.__items['title'].generate_latex(out_path, remote)
         ltx += "\n\\begin{document}\\maketitle\\tableofcontents"
-        for item in self.items:
+        for item in self.__items['items']:
             ltx += item.generate_latex(out_path, remote)
-        #if ReportTitleG105 in super().__items:
-        #    ltx =
+        for item in self.__items['appendix']:
+            ltx += item.generate_latex(out_path, remote)
         ltx += "\\end{document}"
         return ltx
