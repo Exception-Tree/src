@@ -30,7 +30,6 @@ class TestSRCCallback(SimpleReportCreatorCallback):
         return False
 
 
-
 report = ReportG2105()
 title = ReportTitleG2105(title='Test Title', doc_name='Doc Name')
 title.approvedBy('director', 'Ivanov I.I.')
@@ -42,7 +41,11 @@ report.append(text)
 
 report.append(ReportImageCommon(Path('./horse.jpg'), 'test caption', 'testref1'))
 
-report.append(ReportAppendixG2105('test', 'ref'))
+appendix = ReportAppendixG2105('обязательное', 'test', 'ref')
+
+param = ReportImageCommonParam('full_width', 50, position_on_page='here')
+appendix.append(ReportImageCommon(Path('./tester.png'), 'test caption', 'apnd_testref', param))
+report.append(appendix)
 
 param = ReportImageCommonParam('full_width', 50)
 report.append(ReportImageCommon(Path('./tester.png'), 'test caption', 'testref', param))

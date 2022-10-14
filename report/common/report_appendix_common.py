@@ -16,9 +16,9 @@ class ReportAppendixCommon(ReportListCommon):
     def reference(self):
         return self.__reference
 
-    def generate_latex(self, output_path: str = None, remote: bool = False) -> str:
-        ltx = '\\appendix{'
-        ltx += f'{self.__caption}'
-        ltx += f'\\label{{sec:{self.__reference}}}}}\n'
-        ltx += super().generate_latex(output_path, remote)
-        return ltx
+    # def generate_latex(self, output_path: str = None, remote: bool = False) -> str:
+    #     ltx = '\\appendix{'
+    #     ltx += f'{self.__caption}'
+    #     ltx += f'\\label{{sec:{self.__reference}}}}}\n'
+    #     ltx += super().generate_latex(output_path, remote)
+    #     return ltx

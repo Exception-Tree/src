@@ -64,6 +64,8 @@ class SimpleReportCreator(object):
         self.__report = report_common
         self.__callback = callback
 
+    def set_report(self, report):
+        self.__report = report
     @property
     def report(self):
         return self.__report
