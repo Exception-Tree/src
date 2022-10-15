@@ -7,18 +7,22 @@ from report.common.report_item_common import ReportItemCommon
 class ReportImageCommonParam:
     def __init__(self, width: Union[float, str], height: Union[float, str],
                  position_on_page: Literal['top', 'bottom', 'center', 'here'] = 'center'):
-        size_types = {'full_width': '\\linewidth',
-                      'full_height': '\\textheight'}
-        if isinstance(width, float):
-            self.__width = width
-        else:
-            if width in size_types:
-                self.__width = size_types[width]
-            else:
-                raise Exception(f'unknown width = {width}')
-        self.__height = height
+        self.__width = self.__size(width)
+        self.__height = self.__size(height)
 
         self.__position = position_on_page
+
+    @staticmethod
+    def __size(param):
+        size_types = {'full_width': '\\linewidth',
+                      'full_height': '\\textheight',
+                      'auto': None}
+        if isinstance(param, float):
+            return param
+        else:
+            if param in size_types:
+                return size_types[param]
+        raise Exception(f'unknown param = {param}')
 
     @property
     def width(self):
@@ -58,7 +62,7 @@ class ReportImageCommon(ReportItemCommon):
         if self.__param and self.__param.position == 'center':
             ltx += '\\centering'
 
-        if self.__param:
+        if self.__param and self.__param.width is not None and self.__param.height is not None:
             ltx += f'\\includegraphics[width={self.__param.width},height={self.__param.width}]'
             ltx += '{'
         else:
