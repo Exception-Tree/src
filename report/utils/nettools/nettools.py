@@ -2,9 +2,9 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import requests
-from loguru import logger
+#from loguru import logger
 
-from mputils.nettools.Zipper import Zipper
+#from mputils.nettools.Zipper import Zipper
 
 
 class NetTools(object):

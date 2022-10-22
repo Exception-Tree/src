@@ -5,7 +5,7 @@ from pathlib import Path
 
 import requests
 
-from mputils.nettools.Zipper import Zipper
+#from mputils.nettools.Zipper import Zipper
 
 
 class LocalTools(object):
