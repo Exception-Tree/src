@@ -114,6 +114,8 @@ class ReportG2105(ReportCommon):
 \usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{graphicx,float}
+\usepackage{longtable}
+\usepackage{lscape}
 \def\tightlist{}
 """
         ltx += '\n'

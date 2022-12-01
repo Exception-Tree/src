@@ -3,7 +3,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-import requests
+#import requests
 
 #from mputils.nettools.Zipper import Zipper
 

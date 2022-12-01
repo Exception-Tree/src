@@ -6,18 +6,18 @@ from report.common.report_item_common import ReportItemCommon
 
 class ReportImageCommonParam:
     def __init__(self, width: Union[float, str], height: Union[float, str],
-                 position_on_page: Literal['top', 'bottom', 'center', 'here'] = 'center'):
+                 position_on_page: Literal['top', 'bottom', 'center', 'here'] = 'center', landscape=False):
         self.__width = self.__size(width)
         self.__height = self.__size(height)
-
         self.__position = position_on_page
+        self.__landscape = landscape
 
     @staticmethod
     def __size(param):
         size_types = {'full_width': '\\linewidth',
                       'full_height': '\\textheight',
                       'auto': None}
-        if isinstance(param, float) or isinstance(param, int):
+        if isinstance(param, float):
             return param
         else:
             if param in size_types:
@@ -35,6 +35,10 @@ class ReportImageCommonParam:
     @property
     def position(self):
         return self.__position
+
+    @property
+    def landscape(self):
+        return self.__landscape
 
 
 class ReportImageCommon(ReportItemCommon):
@@ -62,11 +66,15 @@ class ReportImageCommon(ReportItemCommon):
         if self.__param and self.__param.position == 'center':
             ltx += '\\centering'
 
+        angle=0
+        if self.__param.landscape:
+            angle=90
         if self.__param and self.__param.width is not None and self.__param.height is not None:
-            ltx += f'\\includegraphics[width={self.__param.width},height={self.__param.width}]'
+            ltx += f'\\includegraphics[angle={angle},width={self.__param.width},height={self.__param.width}]'
             ltx += '{'
         else:
-            ltx += '\\includegraphics{'
+            ltx += f'\\includegraphics[angle={angle}]'
+            ltx += '{'
         ltx += f'{self.__filename.as_posix()}'
         ltx += '}'
         # self.ltx+='\\href{http://commons.wikimedia.org/wiki/File:Pachydyptes_ponderosus.jpg}'
