@@ -17,7 +17,7 @@ class ReportImageCommonParam:
         size_types = {'full_width': '\\linewidth',
                       'full_height': '\\textheight',
                       'auto': None}
-        if isinstance(param, float):
+        if isinstance(param, float) or isinstance(param, int):
             return param
         else:
             if param in size_types:
@@ -67,7 +67,7 @@ class ReportImageCommon(ReportItemCommon):
             ltx += '\\centering'
 
         angle=0
-        if self.__param.landscape:
+        if self.__param and self.__param.landscape:
             angle=90
         if self.__param and self.__param.width is not None and self.__param.height is not None:
             ltx += f'\\includegraphics[angle={angle},width={self.__param.width},height={self.__param.width}]'
