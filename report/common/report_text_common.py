@@ -43,10 +43,15 @@ class ReportTextCommon(ReportItemCommon):
                 iter_items = re.finditer(r'\\%(image|table)\(([^)]+)\)', line)
                 for match in iter_items:
                     ref = match[2]
+                    found = False
                     for item in self.__items:
                         if item.reference == ref:
                             replace_text = item.generate_latex(output_path, remote)
                             line = line.replace(match[0], replace_text)
+                            found = True
+                            break
+                    if not found:
+                        print(f'in {filename} {ref} not found in yaml')
                 lines += line
         with open(filename, 'w', encoding='utf8') as file:
             file.write(lines)

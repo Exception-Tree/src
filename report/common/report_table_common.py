@@ -42,8 +42,8 @@ class ReportTableCommon(ReportItemCommon):
 
     @align.setter
     def align(self, values):
-        if not all([x in ('r', 'l', 'c') for x in set(values)]):
-            raise Exception(f'Wrong align format (it should be `r` or `l` or `c`): {values}')
+        #if not all([x in ('r', 'l', 'c') for x in set(values)]):
+        #    raise Exception(f'Wrong align format (it should be `r` or `l` or `c`): {values}')
         if len(values) == 1:
             values = values * self.col_amount
         if self.col_amount != len(values):
@@ -58,7 +58,7 @@ class ReportTableCommon(ReportItemCommon):
     def reference(self, val):
         self.__ref = val
 
-    def set_wide_body_align(self, max_width=110, one_letter=2.05):
+    def set_wide_body_align(self, max_width=70, one_letter=2.05):
         df = self.data_frame
 
         salt = "d12dj0fjf38f2d12ds"
@@ -66,9 +66,14 @@ class ReportTableCommon(ReportItemCommon):
         for i, col in enumerate(df.columns):
             indicies_list[f'{col}{salt}_{i}'] = i
             df[f'{col}{salt}_{i}'] = df.iloc[:, i].apply(lambda x: len(f'{x}'))
+            if df[f'{col}{salt}_{i}'].max() < len(col):
+                df[f'{col}{salt}_{i}'] = len(col)
         df_len = df[list(indicies_list.keys())]
 
+        #print(df_len.max())
+        #print(len(self.data_frame.columns.max()))
         total_width = df_len.max().sum()
+        #print(f'{self.__title}:{total_width}, {max_width}')
         if total_width > max_width:
             max_col = df_len.max().where(df_len.max() == df_len.max().max()).dropna()
             max_col_title = max_col.index.to_list()[0]
@@ -82,7 +87,9 @@ class ReportTableCommon(ReportItemCommon):
         ltx = ""
         if self.__landscape:
             ltx += '\\begin{landscape}\n'
-        self.set_wide_body_align()  # Проверяем, умещается ли весь текст на страницу.
+            self.set_wide_body_align(max_width=100)
+        else:
+            self.set_wide_body_align()  # Проверяем, умещается ли весь текст на страницу.
 
         ltx += f'\\begin{{longtable}}{{{self.align}}}\n'
         if self.reference:

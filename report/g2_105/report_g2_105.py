@@ -7,7 +7,7 @@ from report.common.report_title_common import ReportTitleCommon
 
 
 class ReportTitleG2105(ReportTitleCommon):
-    def __init__(self, title: str, doc_name: str, departament=None, company=None):
+    def __init__(self, title: str, doc_name: str, departament=None, company=None, signature=''):
         if departament:
             self.__departament = departament
         else:
@@ -21,7 +21,7 @@ class ReportTitleG2105(ReportTitleCommon):
         self.__designedBy = []
         self.__title = title
         self.__docName = doc_name
-        # self.__signature = signature
+        self.__signature = signature
         # self.__classCode = classCode
 
     def generate_latex(self, out_path, remote):
@@ -32,8 +32,8 @@ class ReportTitleG2105(ReportTitleCommon):
         ltx += f'\\ESKDdocName{{{self.__docName}}}\n'
         # if len(self.__docName) > 10:
         #     ltx += fr'\\ESKDcolumnI{{\\ESKDfontII {self.__docName}}}\n'
-        # self.ltx += fr'\\ESKDsignature{{{self.__signature}}}\n'
-        # self.ltx += fr'\\ESKDtitle{{{self.__title}}}\n'
+        ltx += f'\\ESKDsignature{{{self.__signature}}}\n'
+        ltx += f'\\ESKDtitle{{{self.__title}}}\n'
         # if self.__classCode:
         #     self.ltx += fr'\\ESKDclassCode{{{self.__classCode}}}\n'
         if self.__approved:
@@ -115,13 +115,15 @@ class ReportG2105(ReportCommon):
 \usepackage{cleveref}
 \usepackage{graphicx,float}
 \usepackage{longtable}
-\usepackage{lscape}
+\usepackage{pdflscape}
+\usepackage{booktabs}
 \def\tightlist{}
 """
+        #\usepackage{lscape}
         ltx += '\n'
         if self.__items['title']:
             ltx += self.__items['title'].generate_latex(out_path, remote)
-        ltx += "\n\\begin{document}\\maketitle\\tableofcontents"
+        ltx += "\n\\begin{document}\\maketitle\\tableofcontents\\clearpage"
         for item in self.__items['items']:
             ltx += item.generate_latex(out_path, remote)
         for item in self.__items['appendix']:

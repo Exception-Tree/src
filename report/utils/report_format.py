@@ -63,5 +63,6 @@ class ReportFileFormat:
 
         tj = TableJSON(body=self.__body, header=self.__header, footer=self.__footer, columns=self.__columns)
         with output_file.open('w', encoding='utf8') as wf:
-            json.dump([tj.dict()], wf, indent=2, ensure_ascii=False)
+            #json.dump([tj.dict()], wf, indent=2, ensure_ascii=False)
+            json.dump(tj.dict(), wf, indent=2, ensure_ascii=False)
         return output_file

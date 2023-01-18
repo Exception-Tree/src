@@ -6,7 +6,7 @@ from report.common.report_item_common import ReportItemCommon
 
 class ReportImageCommonParam:
     def __init__(self, width: Union[float, str], height: Union[float, str],
-                 position_on_page: Literal['top', 'bottom', 'center', 'here'] = 'center', landscape=False):
+                 position_on_page: Literal['top', 'bottom', 'center', 'here'] = 'center', landscape: Literal['None', 'page', 'picture', 'both'] = 'None'):
         self.__width = self.__size(width)
         self.__height = self.__size(height)
         self.__position = position_on_page
@@ -54,7 +54,10 @@ class ReportImageCommon(ReportItemCommon):
         return self.__reference
 
     def generate_latex(self, output_path, remote) -> str:
-        ltx = '\\begin{figure}'
+        ltx = ''
+        if self.__param.landscape == 'both' or self.__param.landscape == 'page':
+            ltx += '\\begin{landscape}'
+        ltx += '\\begin{figure}'
         if self.__param and self.__param.position != 'center':
             if self.__param.position == 'top':
                 ltx += '[t]'
@@ -66,11 +69,11 @@ class ReportImageCommon(ReportItemCommon):
         if self.__param and self.__param.position == 'center':
             ltx += '\\centering'
 
-        angle=0
-        if self.__param.landscape:
-            angle=90
+        angle = 0
+        if self.__param.landscape == 'picture' or self.__param.landscape == 'both':
+            angle = 90
         if self.__param and self.__param.width is not None and self.__param.height is not None:
-            ltx += f'\\includegraphics[angle={angle},width={self.__param.width},height={self.__param.width}]'
+            ltx += f'\\includegraphics[angle={angle},width={self.__param.width},height={self.__param.height}]'
             ltx += '{'
         else:
             ltx += f'\\includegraphics[angle={angle}]'
@@ -86,4 +89,7 @@ class ReportImageCommon(ReportItemCommon):
         ltx += '}\n'
         ltx += f'\\label{{img:{self.__reference}}}\n'
         ltx += '\\end{figure}\n'
+
+        if self.__param.landscape == 'both' or self.__param.landscape == 'page':
+            ltx += '\\end{landscape}'
         return ltx
