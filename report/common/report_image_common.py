@@ -17,7 +17,7 @@ class ReportImageCommonParam:
         size_types = {'full_width': '\\linewidth',
                       'full_height': '\\textheight',
                       'auto': None}
-        if isinstance(param, float) or isinstance(param, int):
+        if isinstance(param, float):
             return param
         else:
             if param in size_types:

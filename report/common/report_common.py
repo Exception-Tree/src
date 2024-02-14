@@ -5,7 +5,6 @@ from report.common.report_image_common import ReportImageCommon
 from report.common.report_item_common import ReportItemCommon
 
 
-
 class ReportCommon(ABC):
 
     @abstractmethod
